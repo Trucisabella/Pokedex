@@ -1,0 +1,472 @@
+<!-- =======================================================
+  * CSCI 2170 Assignment 1
+  * Author: Truc Tran (B00812018)
+  * Created: Jan 22 2025
+  * Updated: Feb 5 2025
+  * Description: This is the main page of the Pokédex website.
+  ======================================================== -->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>Pokédex</title>
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+
+  <!-- Favicons -->
+  <link href="assets/img/favicon-32x32.png" rel="icon">
+  <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com" rel="preconnect">
+  <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Inter:wght@100;200;300;400;500;600;700;800;900&family=Cardo:ital,wght@0,400;0,700;1,400;1,700&display=swap"
+    rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="assets/vendor/aos/aos.css" rel="stylesheet">
+  <link href="assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+  <link href="assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+
+  <!-- Main CSS File -->
+  <link href="css/styles.css" rel="stylesheet">
+
+  <!-- =======================================================
+  * Template Name: PhotoFolio
+  * Template URL: https://bootstrapmade.com/photofolio-bootstrap-photography-website-template/
+  * Updated: Aug 07 2024 with Bootstrap v5.3.3
+  * Author: BootstrapMade.com
+  * License: https://bootstrapmade.com/license/
+  ======================================================== -->
+</head>
+
+<body class="index-page">
+
+  <header id="header" class="header d-flex align-items-center sticky-top">
+    <div class="container-fluid position-relative d-flex align-items-center justify-content-between">
+
+      <a href="index.html" class="logo d-flex align-items-center me-auto me-xl-0">
+        <img src="assets/img/apple-touch-icon.png" alt="">
+        <h1 class="sitename">Pokédex</h1>
+      </a>
+
+      <nav id="navmenu" class="navmenu">
+        <ul>
+          <li><a href="index.html">Home<br></a></li>
+          <li><a href="index.html">About</a></li>
+          <li><a href="index.html">Services</a></li>
+          <li><a href="index.html">Contact</a></li>
+          <li><a href="favorites.html">Favorites</a></li>
+        </ul>
+        <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
+      </nav>
+
+    </div>
+  </header>
+
+  <main class="main">
+
+    <!-- Intro Section -->
+    <section id="intro" class="intro section">
+      <div class="container">
+        <div class="row justify-content-center">
+          <div class="col-lg-6 text-center" data-aos="fade-up" data-aos-delay="100">
+            <h2><span>Pokémon in your area!</span></h2>
+            <p>Dive into the ultimate Pokédex to explore Pokémon details, stats, and fascinating facts.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Search Section -->
+    <form method="get">
+      <div class="col-lg-6 text-center" data-aos="fade-up" data-aos-delay="250">
+        <label for="thing-info-id">Enter pokémon name or ID (without leading zeros): </label>
+        <input type="text" name="info-to-get-thing" id="thing-info-id">
+        <input type="submit" value="Find" id="submit-btn">
+      </div>
+
+      <div class="filter" data-aos="fade-up" data-aos-delay="250">
+        <input type="checkbox" value="Fire" id="checkbox-fire">
+        <label for="filter-options"> Fire </label>
+        <input type="checkbox" value="Water" id="checkbox-water">
+        <label for="filter-options"> Water </label>
+        <input type="checkbox" value="Rock" id="checkbox-rock">
+        <label for="filter-options"> Rock </label>
+        <input type="checkbox" value="Ice" id="checkbox-ice">
+        <label for="filter-options"> Ice </label>
+      </div>
+
+    </form>
+    <div id="thing"></div>
+
+    <!-- Display Info -->
+    <script>
+      document.querySelector('#submit-btn').addEventListener('click', (e) => {
+        e.preventDefault();
+
+        const id = document.querySelector('#thing-info-id').value;
+        const url = `https://pokeapi.co/api/v2/pokemon/${id}`;
+
+
+        fetch(url)
+          .then(response => response.json())
+          .then(data => {
+            console.log(data);
+            const dataDiv = document.querySelector('#thing');
+            dataDiv.innerHTML = `
+            <table class="info-table">
+            <thead>
+              <tr>
+              <th>Name</th>
+              <th>Weight</th>
+              <th>Height</th>
+              <th>Base Experience</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+              <td><a href="details.html" onclick = "details('${data.name}')">${data.name}</a></td>
+              <td>${data.weight}</td>
+              <td>${data.height}</td>
+              <td>${data.base_experience}</td>
+              </tr>
+            </tbody>
+            </table>
+            `;
+          })
+          .catch(err => console.log(err));
+      });
+
+      function details(name) {
+        sessionStorage.setItem("selectedPokemon", name);
+      }
+    </script>
+
+    <!-- Display filter options -->
+    <script>
+      const fire = document.getElementById('checkbox-fire');
+      fire.addEventListener('change', (e) => {
+        e.preventDefault();
+        const urlFire = `https://pokeapi.co/api/v2/type/10`;
+        if (fire.checked) {
+          console.log("Fire checked");
+          fetch(urlFire)
+            .then(response => response.json())
+            .then(data => {
+              let htmlString = `
+                <table class="info-table">
+                <thead>
+                  <tr>
+                  <th>Name</th>
+                  <th>Weight</th>
+                  <th>Height</th>
+                  <th>Base Experience</th>
+                  </tr>
+                </thead>
+                <tbody>
+                `;
+              const promises = data.pokemon.map(element => {
+                const pokeurl = element.pokemon.url;
+                return fetch(pokeurl)
+                  .then(response => response.json())
+                  .then(data2 => {
+                    console.log(data2);
+                    htmlString += `
+                    <tr>
+                      <td><a href="details.html" onclick=details('${data2.name}')>${data2.name}</a></td>
+                      <td>${data2.weight}</td>
+                      <td>${data2.height}</td>
+                      <td>${data2.base_experience}</td>
+                    </tr>
+                    `;
+                  });
+              });
+              Promise.all(promises).then(() => {
+                htmlString += `
+                </tbody>
+                </table>
+                `;
+                const dataDiv = document.querySelector('#thing');
+                dataDiv.innerHTML = htmlString;
+              });
+            })
+            .catch(err => console.log(err));
+        }
+        else {
+          console.log("Fire unchecked");
+          const dataDiv = document.querySelector('#thing');
+          dataDiv.innerHTML = '';
+        }
+      });
+
+      const water = document.getElementById('checkbox-water');
+      water.addEventListener('change', (e) => {
+        e.preventDefault();
+        const urlWater = `https://pokeapi.co/api/v2/type/11`;
+        if (water.checked) {
+          console.log("Water checked");
+          fetch(urlWater)
+            .then(response => response.json())
+            .then(data => {
+              let htmlString = `
+                <table class="info-table">
+                <thead>
+                  <tr>
+                  <th>Name</th>
+                  <th>Weight</th>
+                  <th>Height</th>
+                  <th>Base Experience</th>
+                  </tr>
+                </thead>
+                <tbody>
+                `;
+              const promises = data.pokemon.map(element => {
+                const pokeurl = element.pokemon.url;
+                return fetch(pokeurl)
+                  .then(response => response.json())
+                  .then(data2 => {
+                    console.log(data2);
+                    htmlString += `
+                    <tr>
+                      <td><a href="details.html" onclick=details('${data2.name}')>${data2.name}</a></td>
+                      <td>${data2.weight}</td>
+                      <td>${data2.height}</td>
+                      <td>${data2.base_experience}</td>
+                    </tr>
+                    `;
+                  });
+              });
+              Promise.all(promises).then(() => {
+                htmlString += `
+                </tbody>
+                </table>
+                `;
+                const dataDiv = document.querySelector('#thing');
+                dataDiv.innerHTML = htmlString;
+              });
+            })
+            .catch(err => console.log(err));
+
+        }
+        else {
+          console.log("Water unchecked");
+          const dataDiv = document.querySelector('#thing');
+          dataDiv.innerHTML = '';
+        }
+      });
+
+      const rock = document.getElementById('checkbox-rock');
+      rock.addEventListener('change', (e) => {
+        e.preventDefault();
+        const urlRock = `https://pokeapi.co/api/v2/type/6`;
+        if (rock.checked) {
+          console.log("Rock checked");
+          fetch(urlRock)
+            .then(response => response.json())
+            .then(data => {
+              let htmlString = `
+                <table class="info-table">
+                <thead>
+                  <tr>
+                  <th>Name</th>
+                  <th>Weight</th>
+                  <th>Height</th>
+                  <th>Base Experience</th>
+                  </tr>
+                </thead>
+                <tbody>
+                `;
+              const promises = data.pokemon.map(element => {
+                const pokeurl = element.pokemon.url;
+                return fetch(pokeurl)
+                  .then(response => response.json())
+                  .then(data2 => {
+                    console.log(data2);
+                    htmlString += `
+                    <tr>
+                      <td><a href="details.html" onclick=details('${data2.name}')>${data2.name}</a></td>
+                      <td>${data2.weight}</td>
+                      <td>${data2.height}</td>
+                      <td>${data2.base_experience}</td>
+                    </tr>
+                    `;
+                  });
+              });
+              Promise.all(promises).then(() => {
+                htmlString += `
+                </tbody>
+                </table>
+                `;
+                const dataDiv = document.querySelector('#thing');
+                dataDiv.innerHTML = htmlString;
+              });
+            })
+            .catch(err => console.log(err));
+        }
+        else {
+          console.log("Rock unchecked");
+          const dataDiv = document.querySelector('#thing');
+          dataDiv.innerHTML = '';
+        }
+      });
+
+      const ice = document.getElementById('checkbox-ice');
+      ice.addEventListener('change', (e) => {
+        e.preventDefault();
+        const urlIce = `https://pokeapi.co/api/v2/type/15`;
+        if (ice.checked) {
+          console.log("Ice checked");
+          fetch(urlIce)
+            .then(response => response.json())
+            .then(data => {
+              let htmlString = `
+                <table class="info-table">
+                <thead>
+                  <tr>
+                  <th>Name</th>
+                  <th>Weight</th>
+                  <th>Height</th>
+                  <th>Base Experience</th>
+                  </tr>
+                </thead>
+                <tbody>
+                `;
+              const promises = data.pokemon.map(element => {
+                const pokeurl = element.pokemon.url;
+                return fetch(pokeurl)
+                  .then(response => response.json())
+                  .then(data2 => {
+                    console.log(data2);
+                    htmlString += `
+                    <tr>
+                      <td><a href="details.html" onclick=details('${data2.name}')>${data2.name}</a></td>
+                      <td>${data2.weight}</td>
+                      <td>${data2.height}</td>
+                      <td>${data2.base_experience}</td>
+                    </tr>
+                    `;
+                  });
+              });
+              Promise.all(promises).then(() => {
+                htmlString += `
+                </tbody>
+                </table>
+                `;
+                const dataDiv = document.querySelector('#thing');
+                dataDiv.innerHTML = htmlString;
+              });
+            })
+            .catch(err => console.log(err));
+        }
+        else {
+          console.log("Ice unchecked");
+          const dataDiv = document.querySelector('#thing');
+          dataDiv.innerHTML = '';
+        }
+      });
+    </script>
+
+
+    <!-- Gallery Section -->
+    <section id="gallery" class="gallery section">
+
+      <div class="container-fluid" data-aos="fade-up" data-aos-delay="100">
+
+        <div class="row gy-4 justify-content-center">
+
+          <div class="col-xl-3 col-lg-4 col-md-6">
+            <div class="gallery-item h-100">
+              <img src="assets/img/gallery/004-Charmander.png" class="img-fluid" alt="">
+              <div class="gallery-links d-flex align-items-center justify-content-center">
+                <a href="assets/img/gallery/004-Charmander.png" title="0004 - Charmander"
+                  class="glightbox preview-link"><i class="bi bi-arrows-angle-expand"></i></a>
+                <a href="details.html" onclick="details('charmander')" class="details-link"><i
+                    class="bi bi-link-45deg"></i></a>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-xl-3 col-lg-4 col-md-6">
+            <div class="gallery-item h-100">
+              <img src="assets/img/gallery/040-Wigglytuff.png" class="img-fluid" alt="">
+              <div class="gallery-links d-flex align-items-center justify-content-center">
+                <a href="assets/img/gallery/040-Wigglytuff.png" title="0040 - Wigglytuff"
+                  class="glightbox preview-link"><i class="bi bi-arrows-angle-expand"></i></a>
+                <a href="details.html" onclick="details('wigglytuff')" class="details-link"><i
+                    class="bi bi-link-45deg"></i></a>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-xl-3 col-lg-4 col-md-6">
+            <div class="gallery-item h-100">
+              <img src="assets/img/gallery/192-Sunflora.png" class="img-fluid" alt="">
+              <div class="gallery-links d-flex align-items-center justify-content-center">
+                <a href="assets/img/gallery/192-Sunflora.png" title="0192 - Sunflora" class="glightbox preview-link"><i
+                    class="bi bi-arrows-angle-expand"></i></a>
+                <a href="details.html" onclick="details('sunflora')" class="details-link"><i
+                    class="bi bi-link-45deg"></i></a>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-xl-3 col-lg-4 col-md-6">
+            <div class="gallery-item h-100">
+              <img src="assets/img/gallery/363-Spheal.png" class="img-fluid" alt="">
+              <div class="gallery-links d-flex align-items-center justify-content-center">
+                <a href="assets/img/gallery/363-Spheal.png" title="0363 - Spheal" class="glightbox preview-link"><i
+                    class="bi bi-arrows-angle-expand"></i></a>
+                <a href="details.html" onclick="details('spheal')" class="details-link"><i
+                    class="bi bi-link-45deg"></i></a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer id="footer" class="footer">
+
+    <div class="container">
+      <div class="copyright text-center ">
+        <p>© <span>Copyright</span> <strong class="px-1 sitename">PhotoFolio</strong> <span>All Rights Reserved</span>
+        </p>
+      </div>
+      <div class="credits">
+        <!-- All the links in the footer should remain intact. -->
+        <!-- You can delete the links only if you've purchased the pro version. -->
+        <!-- Licensing information: https://bootstrapmade.com/license/ -->
+        <!-- Purchase the pro version with working PHP/AJAX contact form: [buy-url] -->
+        Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a> Distributed by <a
+          href="https://themewagon.com">ThemeWagon</a>
+      </div>
+    </div>
+
+  </footer>
+
+  <!-- Scroll Top -->
+  <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i
+      class="bi bi-arrow-up-short"></i></a>
+
+  <!-- Vendor JS Files -->
+  <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="assets/vendor/php-email-form/validate.js"></script>
+  <script src="assets/vendor/aos/aos.js"></script>
+  <script src="assets/vendor/glightbox/js/glightbox.min.js"></script>
+  <script src="assets/vendor/swiper/swiper-bundle.min.js"></script>
+
+  <!-- Main JS File -->
+  <script src="js/script.js"></script>
+
+</body>
+
+</html>
