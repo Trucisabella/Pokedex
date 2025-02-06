@@ -1,15 +1,14 @@
-# Assignment 1 - Interactive Web Application
+### Pokédex
 
-## Student Information
+## Information
 
-- **Name**: Truc Tran
-- **Student ID**: B00812018
+- **Name**: Ella Tran
 - **Date Created**: Jan 17, 2025
 
 ## Application Type and Description
 
 Application Type: Pokédex \
-Description: Pokédex offers a creative and diverse dataset that could make the project interesting and visually appealing. The variety of Pokédex perfect for showcasing dynamic client-side features such as searching, filtering and data displaying. Additionally, the application would be enjoyable to build and relatable to users since Pokémon are popular.
+Description: This project is an interactive Pokédex that allows users to explore detailed information about various Pokémon. Pokédex offers a creative and diverse dataset that could make the project interesting and visually appealing. The variety of Pokédex perfect for showcasing dynamic client-side features such as searching, filtering and data displaying. Additionally, the application would be enjoyable to build and relatable to users since Pokémon are popular.
 
 ## Steps to set up and run the application
 
